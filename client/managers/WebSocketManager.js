@@ -11,6 +11,8 @@ const dispatchSocket = (message, type) => {
 
 const receiveSocket = message => {
     console.log("I GOT A SOCKET")
+    //TODO All flux stuff for creating messages will be handled here, so will have to have a switch case
+    // What about updating a message? Will that hit the server first? I don't like that slowness
     updateMessageStatus(message.id, message.status)
 }
 

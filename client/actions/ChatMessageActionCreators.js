@@ -3,6 +3,10 @@ import { ActionTypes, MessageStatuses } from '../constants/ChatConstants'
 import { socketCreateMessage } from '../managers/WebSocketManager'
 
 let currId = 0
+//TODO I think this will have to be re done so we can accept new messages from other clients
+// Probably will have to only let the WebSocketManager use the action creators here
+// And when you make a new one we append a "loading" one, and it is only really made using this
+// action when the WebSocketManager receives a reply from the server
 export const createMessage = (username, text) => {
 
     const message = {
@@ -18,12 +22,8 @@ export const createMessage = (username, text) => {
     })
     // Create it in DB and send to other clients
     socketCreateMessage(message)
-    // Increment ID for next messages. This won't work for when there are 1+ clients
-    // DB will have to handle what IDs clients get, but the client needs an ID for React
-    // when in the "loading" state because at this point the DB hasn't responded yet.
-    // Maybe get length of messages + 1? Still has problems. Probably some hash that
-    // is determined by the clients username + random thing just so no collisions
-    // happen until DB replies with a real ID
+
+    //TODO When this is re done we won't have to worry about ID stuff
     currId++
 }
 
