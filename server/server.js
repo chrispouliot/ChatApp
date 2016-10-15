@@ -10,9 +10,18 @@ app.get('/', (req, res) => {
 })
 
 // Not used yet
-io.on('connection', function(socket){
-    socket.on('message', function(msg){
-        console.log('message: ' + msg)
+io.on('connection', socket => {
+    // Move constants out of Client and use the chat_message client here and in the React app
+    socket.on('chat_message', msg => {
+        console.log('chat_message: ' + `status: ${msg.status}, username: ${msg.username} , text: ${msg.text}`)
+        // DO SOME DB STUFF AND GET A NEW STATUS THEN SEND TO EVERYBODY.
+        // We will have to broadcast a diff event to everybody else later
+        // new vs update status
+        setTimeout(() => {
+            // once again re do where we store constants
+            msg.status = "success"
+            io.emit('chat_message', msg)
+        }, 2000)
     })
 })
 
