@@ -7,32 +7,33 @@ let currId = 0
 // Probably will have to only let the WebSocketManager use the action creators here
 // And when you make a new one we append a "loading" one, and it is only really made using this
 // action when the WebSocketManager receives a reply from the server
-export const createMessage = (username, text) => {
+export const createLoadingMessage = (username, text) => {
 
     const message = {
         id: currId,
-            status: MessageStatuses.LOADING,
-            username,
-            text
+        status: MessageStatuses.LOADING,
+        username,
+        text
     }
 
     AppDispatcher.dispatch({
-        type: ActionTypes.CREATE_MESSAGE,
+        type: ActionTypes.CREATE_LOADING_MESSAGE,
         message
     })
     // Create it in DB and send to other clients
     socketCreateMessage(message)
 
-    //TODO When this is re done we won't have to worry about ID stuff
+    //TODO make this based on username hash or something
     currId++
 }
 
-export const updateMessageStatus = (id, status) => {
+export const createNewMessage = (message) => {
+    // receive new message
+}
+
+export const updateMessage = (message) => {
     AppDispatcher.dispatch({
-        type: ActionTypes.UPDATE_MESSAGE_STATUS,
-        message: {
-            id: id,
-            status: status
-        }
+        type: ActionTypes.UPDATE_MESSAGE,
+        message
     })
 }

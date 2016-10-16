@@ -5,15 +5,25 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import { ActionTypes } from '../constants/ChatConstants'
 
 const CHANGE_EVENT = 'change'
-// This is state. Change to an object {} with key of ID?
-let messages = {}
 
-const addMessage = message => {
-    messages[message.id] = message
+let messageState = {
+    loadedMessages: {},
+    loadingMessages: {}
 }
 
-const updateMessageStatus = message => {
-    messages[message.id].status = message.status
+const addLoadedMessage = message => {
+    messageState.loadedMessages[message.id] = message
+}
+
+const addLoadingMessage = message => {
+    messageState.loadingMessages[message.id] = message
+}
+
+const updateMessage = updatedMessage => {
+    // for now just assume it's to update status, but we will
+    // need to also accept "edits" to message text
+    messageState.loadedMessages[updatedMessage.id] = updatedMessage
+    delete messageState.loadingMessages[updatedMessage.prevId]
 }
 
 let MessageStore = assign({}, EventEmitter.prototype, {
@@ -30,18 +40,22 @@ let MessageStore = assign({}, EventEmitter.prototype, {
     },
 
     getAll() {
-        return messages
+        return messageState
     }
 })
 
 MessageStore.dispatchToken = AppDispatcher.register(action => {
     switch(action.type) {
-        case ActionTypes.CREATE_MESSAGE:
-            addMessage(action.message)
+        case ActionTypes.CREATE_LOADING_MESSAGE:
+            addLoadingMessage(action.message)
             MessageStore.emitChange()
             break
-        case ActionTypes.UPDATE_MESSAGE_STATUS:
-            updateMessageStatus(action.message)
+        case ActionTypes.CREATE_NEW_MESSAGE:
+            addLoadedMessage(action.message)
+            MessageStore.emitChange()
+            break
+        case ActionTypes.UPDATE_MESSAGE:
+            updateMessage(action.message)
             MessageStore.emitChange()
             break
         default:

@@ -14,6 +14,7 @@ export default class CommentList extends React.Component {
     constructor() {
         super()
         this.state = getStateFromStore()
+        this.renderComment = this.renderComment.bind(this)
     }
 
     componentDidMount() {
@@ -24,8 +25,24 @@ export default class CommentList extends React.Component {
         MessageStore.removeChangeListener(this._onChange.bind(this))
     }
 
-    renderComment(commentId) {
-        return <Comment key={commentId} comment={this.state.messages[commentId]}/>
+    renderComment(message) {
+        return <Comment key={message.id} comment={message}/>
+    }
+
+    renderCommentList() {
+        //TODO this is just for now. Please dont look at this code
+        let loadedMessages = []
+        for (let key of Object.keys(this.state.messages.loadedMessages)) {
+            loadedMessages.push(this.renderComment(this.state.messages.loadedMessages[key]))
+        }
+
+        let loadingMessages = []
+        for (let key of Object.keys(this.state.messages.loadingMessages)) {
+            loadingMessages.push(this.renderComment(this.state.messages.loadingMessages[key]))
+        }
+
+        return loadedMessages.concat(loadingMessages)
+
     }
 
     _onChange() {
@@ -33,9 +50,10 @@ export default class CommentList extends React.Component {
     }
 
     render() {
+        // make betterer
         return (
             <div>
-                {Object.keys(this.state.messages).map(this.renderComment.bind(this))}
+                {this.renderCommentList()}
             </div>
         )
     }
