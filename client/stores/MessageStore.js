@@ -2,7 +2,7 @@ import assign from 'object-assign'
 import EventEmitter from 'events'
 
 import AppDispatcher from '../dispatcher/AppDispatcher'
-import { ActionTypes } from '../constants/ChatConstants'
+import { ActionTypes } from '../../util/Constants'
 
 const CHANGE_EVENT = 'change'
 

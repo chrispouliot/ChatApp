@@ -1,5 +1,5 @@
 import AppDispatcher from '../dispatcher/AppDispatcher'
-import { ActionTypes, MessageStatuses } from '../constants/ChatConstants'
+import { ActionTypes, MessageStatuses } from '../../util/Constants'
 import { socketCreateMessage } from '../managers/WebSocketManager'
 
 let currId = 0

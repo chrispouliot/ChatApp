@@ -1,6 +1,9 @@
 const express = require('express')
 const io = require('socket.io')(3030)
 const path = require('path')
+
+const SocketConstants = require('../util/Constants').SocketEvents
+
 const app = express()
 
 app.use(express.static('client'))
@@ -12,8 +15,8 @@ app.get('/', (req, res) => {
 // Not used yet
 io.on('connection', socket => {
     // Move constants out of Client and use the chat_message client here and in the React app
-    socket.on('new_chat_message', msg => {
-        console.log('new_chat_message: ' + `status: ${msg.status}, username: ${msg.username} , text: ${msg.text}`)
+    socket.on(SocketConstants.NEW_CHAT_MESSAGE, msg => {
+        console.log('new message: ' + `status: ${msg.status}, username: ${msg.username} , text: ${msg.text}`)
         // DO SOME DB STUFF AND GET A NEW STATUS THEN SEND TO EVERYBODY.
         // We will have to broadcast a diff event to everybody else later
         // new vs update status
@@ -26,9 +29,9 @@ io.on('connection', socket => {
             msg.id = Math.floor(Math.random() * 10)
 
             // Broadcast new message to everyone except original emitter
-            socket.broadcast.emit('new_chat_message', msg)
+            socket.broadcast.emit(SocketConstants.NEW_CHAT_MESSAGE, msg)
             // Send to original emitter
-            socket.emit('update_chat_message', msg)
+            socket.emit(SocketConstants.UPDATE_CHAT_MESSAGE, msg)
         }, 2000)
     })
 })
