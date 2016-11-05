@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 import { SocketEvents } from '../constants/ChatConstants'
-import { updateMessage } from '../actions/ChatMessageActionCreators'
+import { createNewMessage, updateMessage } from '../actions/ChatMessageActionCreators'
 
 const socket = io('http://localhost:3030')
 
@@ -11,6 +11,7 @@ const dispatchSocket = (message, type) => {
 
 const receiveNewMessageSocket = message => {
     console.log('Received new message socket')
+    createNewMessage(message)
 }
 
 const receiveUpdatedMessageSocket = message => {

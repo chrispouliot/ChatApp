@@ -28,7 +28,10 @@ export const createLoadingMessage = (username, text) => {
 }
 
 export const createNewMessage = (message) => {
-    // receive new message
+    AppDispatcher.dispatch({
+        type: ActionTypes.CREATE_NEW_MESSAGE,
+        message
+    })
 }
 
 export const updateMessage = (message) => {

@@ -24,7 +24,11 @@ io.on('connection', socket => {
             msg.prevId = msg.id
             // this new ID will be from the DB and will be given to all clients
             msg.id = Math.floor(Math.random() * 10)
-            io.emit('update_chat_message', msg)
+
+            // Broadcast new message to everyone except original emitter
+            socket.broadcast.emit('new_chat_message', msg)
+            // Send to original emitter
+            socket.emit('update_chat_message', msg)
         }, 2000)
     })
 })
