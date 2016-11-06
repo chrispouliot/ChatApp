@@ -18,7 +18,7 @@ export const createLoadingMessage = (username, text) => {
         type: ActionTypes.CREATE_LOADING_MESSAGE,
         message
     })
-    // Create it icreateNewMessagen DB and send to other clients
+    // Create it in DB and send to other clients
     socketCreateMessage(message)
 
     //TODO make this based on username hash or something
