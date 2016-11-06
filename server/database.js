@@ -10,23 +10,38 @@ async function getDb() {
     return mongoDb
 }
 
+async function retrieveMessages(username=null) {
+    //TODO use username for filter if passed
+    let db = await getDb()
+    console.log("I got here")
+
+    let messages = await db.collection("messages").find().toArray()
+    messages.map(msg => delete msg._id)
+    return messages
+}
 
 async function insertMessage(message) {
     let db = await getDb()
-    let messages = db.collection("messages")
 
-    return await messages.insertOne(message)
+    let messages = db.collection("messages")
+    let result = await messages.insertOne(message)
+    return result.ops[0]
 }
 
-async function addMessage(username, text) {
+// EXPORTS
+
+export async function addMessage(username, text) {
     let message = {
         timestamp: new Date(),
         username,
         text
     }
+
     let result = await insertMessage(message)
-    return result.ops[0]
+    delete result._id
+    return result
 }
 
-// It was too gross having "export default async AddMessage"
-export default addMessage
+export async function listMessages() {
+    return await retrieveMessages()
+}
