@@ -11,6 +11,7 @@ export const MessageStatuses = {
 }
 
 export const SocketEvents = {
+    LOAD_CHAT_MESSAGES: "load_chat_messages",
     NEW_CHAT_MESSAGE: "new_chat_message",
     UPDATE_CHAT_MESSAGE: "update_chat_message"
 }

@@ -3,15 +3,13 @@ import { ActionTypes, MessageStatuses } from '../../util/Constants'
 import { socketCreateMessage } from '../managers/WebSocketManager'
 
 let currId = 0
-//TODO I think this will have to be re done so we can accept new messages from other clients
-// Probably will have to only let the WebSocketManager use the action creators here
-// And when you make a new one we append a "loading" one, and it is only really made using this
-// action when the WebSocketManager receives a reply from the server
+
 export const createLoadingMessage = (username, text) => {
 
     const message = {
         id: currId,
         status: MessageStatuses.LOADING,
+        timestamp: new Date(),
         username,
         text
     }
@@ -20,7 +18,7 @@ export const createLoadingMessage = (username, text) => {
         type: ActionTypes.CREATE_LOADING_MESSAGE,
         message
     })
-    // Create it in DB and send to other clients
+    // Create it icreateNewMessagen DB and send to other clients
     socketCreateMessage(message)
 
     //TODO make this based on username hash or something

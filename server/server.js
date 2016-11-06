@@ -15,18 +15,33 @@ app.get('/', (req, res) => {
 
 
 io.on('connection', socket => {
-    // Move constants out of Client and use the chat_message client here and in the React app
+
+    socket.on(SocketEvents.LOAD_CHAT_MESSAGES, async ({ limit=10, offset=0 }) => {
+        console.log(`Socket: load ${limit} messages with an offset of ${offset}`)
+        let messages = await listMessages(limit, offset)
+        console.log(messages)
+        //TODO Stop using status? Argh
+        let formattedMessages = messages.map(msg => {
+            msg.status = "success"
+            msg.id = msg.timestamp
+            return msg
+        })
+
+        socket.emit(SocketEvents.LOAD_CHAT_MESSAGES, formattedMessages)
+    })
+
     socket.on(SocketEvents.NEW_CHAT_MESSAGE, async msg => {
         console.log('new message: ' + `status: ${msg.status}, username: ${msg.username} , text: ${msg.text}`)
 
         let saved_msg = await addMessage(msg.username, msg.text)
         saved_msg.status = "success"
-        //TODO need to make this better
+        //TODO make this some sort of public id, since timestamp is already a field
         saved_msg.id = saved_msg.timestamp
 
         socket.broadcast.emit(SocketEvents.NEW_CHAT_MESSAGE, saved_msg)
 
-        // To remove from the "loading" state
+        // We use prevId to map to the old message when we move it to done
+        // I'm sure there's a better way to do this
         saved_msg.prevId = msg.id
         console.log("Sending: ", saved_msg)
         socket.emit(SocketEvents.UPDATE_CHAT_MESSAGE, saved_msg)

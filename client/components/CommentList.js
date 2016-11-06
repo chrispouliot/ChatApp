@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { socketLoadMessages } from '../managers/WebSocketManager'
 import MessageStore from '../stores/MessageStore'
 import Comment from './Comment'
 
@@ -18,6 +19,10 @@ export default class CommentList extends React.Component {
     }
 
     componentDidMount() {
+        //TODO I don't like this, it knows it's using WebSockets now
+        // Way too coupled
+        socketLoadMessages(10, 0)
+
         MessageStore.addChangeListener(this._onChange.bind(this))
     }
 
