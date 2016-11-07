@@ -1,4 +1,6 @@
-const MongoClient = require('mongodb').MongoClient
+import { MongoClient } from 'mongodb'
+
+import { MessageStatuses } from '../util/Constants'
 
 const dbUrl = "mongodb://localhost:27017/chat-app"
 let mongoDb = null
@@ -45,11 +47,18 @@ export async function addMessage(username, text) {
         text
     }
 
+
     let result = await insertMessage(message)
+    result.status = MessageStatuses.SUCCESS
     delete result._id
+
     return result
 }
 
 export async function listMessages(limit, offset) {
-    return await retrieveMessages(limit, offset)
+    let messages = await retrieveMessages(limit, offset)
+    return messages.map(msg => {
+        msg.status = MessageStatuses.SUCCESS
+        return msg
+    })
 }
