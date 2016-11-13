@@ -59,7 +59,7 @@ MessageStore.dispatchToken = AppDispatcher.register(action => {
             MessageStore.emitChange()
             break
         default:
-            // nope
+            console.log(`Received message store action ${action.type} which was not accounted for`)
     }
 })
 
