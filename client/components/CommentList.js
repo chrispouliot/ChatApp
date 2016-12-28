@@ -1,4 +1,4 @@
-import { React, Component } from 'react'
+import React, { Component } from 'react'
 
 import { socketLoadMessages } from '../managers/WebSocketManager'
 import MessageStore from '../stores/MessageStore'
@@ -16,6 +16,7 @@ export default class CommentList extends Component {
         super()
         this.state = getStateFromStore()
         this.renderComment = this.renderComment.bind(this)
+        this.renderCommentList = this.renderCommentList.bind(this)
     }
 
     componentDidMount() {

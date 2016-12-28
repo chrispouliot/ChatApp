@@ -24,16 +24,19 @@ export async function serializeMessages(dbMessages) {
     //TODO probably move most of the code from serializeMessage to completedMessageBuilder(user, dbMessage) and use here
 
     //TODO THIS CODE DOESNT FOLLOW THOSE STEPS ^
-    let serializedMessages = []
-    dbMessages.forEach(async (message) => {
-        // GOOD OLD AWAIT FOR EACH MESSAGE IN THE LIST
-        // TODO THOSE STEPS UP THERE ^
-        let user = await User.findOne({
+    let userPromises = dbMessages.map(message => {
+        return User.findOne({
             where: {
                 id: message.userId
             }
         })
-        serializeMessage.push(completedMessageBuilder(user, message))
     })
-    return serializedMessages
+    // Resolve all promises
+    let users = await Promise.all(userPromises)
+    // Return serialized messages
+    return users.map((user, index) => {
+        // Ehh
+        let message = dbMessages[index]
+        return completedMessageBuilder(user, message)
+    })
 }

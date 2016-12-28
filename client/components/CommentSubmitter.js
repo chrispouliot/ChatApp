@@ -1,4 +1,4 @@
-import { React, Component } from 'react'
+import React, { Component } from 'react'
 
 import { createLoadingMessage } from '../actions/ChatMessageActionCreators'
 import { socketCreateMessage } from '../managers/WebSocketManager'

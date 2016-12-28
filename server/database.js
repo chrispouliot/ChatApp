@@ -12,8 +12,13 @@ export async function addMessage(user, text) {
 }
 
 export async function listMessages(limit, offset) {
-    return await Message.findAll({
+    let rawData =  await Message.findAll({
         offset,
         limit
+    })
+    // This might be unnecessary, seems like the Instance you get back has additional values but
+    // can still access expected fields using regular dot notation (can just ignore dataValues?)
+    return rawData.map(item => {
+        return item.dataValues
     })
 }
