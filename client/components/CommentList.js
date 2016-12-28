@@ -1,17 +1,17 @@
-import React from 'react'
+import { React, Component } from 'react'
 
 import { socketLoadMessages } from '../managers/WebSocketManager'
 import MessageStore from '../stores/MessageStore'
 import Comment from './Comment'
 
 
-const getStateFromStore= () => {
+const getStateFromStore = () => {
     return {
         messages: MessageStore.getAll()
     }
 }
 
-export default class CommentList extends React.Component {
+export default class CommentList extends Component {
     constructor() {
         super()
         this.state = getStateFromStore()

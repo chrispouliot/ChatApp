@@ -2,7 +2,7 @@ import assign from 'object-assign'
 import EventEmitter from 'events'
 
 import AppDispatcher from '../dispatcher/AppDispatcher'
-import { ActionTypes } from '../../util/Constants'
+import { ActionTypes } from '../../util/constants'
 
 const CHANGE_EVENT = 'change'
 
@@ -22,8 +22,16 @@ const addLoadingMessage = message => {
 const updateMessage = updatedMessage => {
     // for now just assume it's to update status, but we will
     // need to also accept "edits" to message text
+    console.log("I just got")
+    console.log(updatedMessage)
     messageState.loadedMessages[updatedMessage.id] = updatedMessage
-    delete messageState.loadingMessages[updatedMessage.prevId]
+    
+    for (let key of messageState.loadedMessages) {
+        if (messageState.loadedMessages[key].text === updatedMessage.text) {
+            delete messageState.loadedMessages[key]
+            break
+        }
+    }
 }
 
 let MessageStore = assign({}, EventEmitter.prototype, {
