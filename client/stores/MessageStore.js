@@ -22,16 +22,8 @@ const addLoadingMessage = message => {
 const updateMessage = updatedMessage => {
     // for now just assume it's to update status, but we will
     // need to also accept "edits" to message text
-    console.log("I just got")
-    console.log(updatedMessage)
     messageState.loadedMessages[updatedMessage.id] = updatedMessage
-    
-    for (let key of messageState.loadedMessages) {
-        if (messageState.loadedMessages[key].text === updatedMessage.text) {
-            delete messageState.loadedMessages[key]
-            break
-        }
-    }
+    delete messageState.loadingMessages[updatedMessage.prevId]
 }
 
 let MessageStore = assign({}, EventEmitter.prototype, {

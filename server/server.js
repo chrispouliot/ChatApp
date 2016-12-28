@@ -20,10 +20,8 @@ io.on('connection', async socket => {
 
     socket.on(SocketEvents.LOAD_CHAT_MESSAGES, async ({ limit=10, offset=0 }) => {
         let messages = await listMessages(limit, offset)
-        console.log(messages)
         let formattedMessages = await serializeMessages(messages)
-        console.log("-----")
-        console.log(formattedMessages)
+
         socket.emit(SocketEvents.LOAD_CHAT_MESSAGES, formattedMessages)
     })
 
@@ -34,6 +32,9 @@ io.on('connection', async socket => {
         let completedMessage = await serializeMessage(savedMessage)
 
         socket.broadcast.emit(SocketEvents.NEW_CHAT_MESSAGE, completedMessage)
+        // Add prevId so we can update it
+        // TODO must be a better way to do this
+        completedMessage["prevId"] = loadingMessage.id
         socket.emit(SocketEvents.UPDATE_CHAT_MESSAGE, completedMessage)
 
     })
