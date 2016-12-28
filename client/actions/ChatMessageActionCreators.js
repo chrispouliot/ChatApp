@@ -1,5 +1,5 @@
 import AppDispatcher from '../dispatcher/AppDispatcher'
-import { ActionTypes } from '../../util/Constants'
+import { ActionTypes } from '../../util/constants'
 
 
 export const createLoadingMessage = message => {

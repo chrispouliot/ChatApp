@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-import { SocketEvents } from '../../util/Constants'
+import { SocketEvents } from '../../util/constants'
 import { createNewMessage, updateMessage } from '../actions/ChatMessageActionCreators'
 
 const socket = io('http://localhost:3030')
