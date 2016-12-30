@@ -8,21 +8,21 @@ export default class CommentSubmitter extends Component {
 
     submitComment(event) {
         event.preventDefault()
-        let textBox = this.refs.commentInput
-        let text = textBox.value
+        const textBox = this.refs.commentInput
+        const text = textBox.value
         textBox.value = ''
 
-        let message = loadingMessageBuilder("fakeUsername", text)
+        const message = loadingMessageBuilder('fakeUsername', text)
 
-        //TODO decouple this? Does it need to know it uses sockets?
+        // TODO decouple this? Does it need to know it uses sockets?
         createLoadingMessage(message)
         socketCreateMessage(message)
     }
 
     render() {
         return (
-            <form onSubmit={this.submitComment.bind(this)}>
-                <input type="text" ref="commentInput"/>
+            <form onSubmit={this.submitComment}>
+                <input type="text" ref="commentInput" />
                 <button type="submit">Submit</button>
             </form>
         )

@@ -8,19 +8,19 @@ export function loadingMessageBuilder(username, text) {
         status: MessageStatuses.LOADING,
         timestamp: new Date(),
         username,
-        text
+        text,
     }
     currLoadingId++
     return message
 }
 
 export function completedMessageBuilder(user, dbMessage) {
-    let {createdAt, text} = dbMessage
+    const { createdAt, text } = dbMessage
     return {
         status: MessageStatuses.SUCCESS,
         id: dbMessage.pubId,
         username: user.username,
         createdAt,
-        text
+        text,
     }
 }

@@ -1,5 +1,5 @@
 import { completedMessageBuilder } from '../util/messageUtil'
-import { User, Message } from './models'
+import { User } from './models'
 
 export function serializeUser(dbUser) {
     // pass
@@ -7,10 +7,10 @@ export function serializeUser(dbUser) {
 
 export async function serializeMessage(dbMessage) {
     console.log("Finding user..")
-    let user = await User.findOne({
+    const user = await User.findOne({
         where: {
-            id: dbMessage.userId
-        }
+            id: dbMessage.userId,
+        },
     })
     console.log("Building message")
     return completedMessageBuilder(user, dbMessage)
@@ -21,22 +21,12 @@ export async function serializeMessages(dbMessages) {
     // 2. If not in found users, hit real cache
     // 3. If not in cache, hit DB for user
     // 4. Return list of serialized messages
-    //TODO probably move most of the code from serializeMessage to completedMessageBuilder(user, dbMessage) and use here
+    // TODO move code from serializeMessage to completedMessageBuilder(user, dbMessage) and use
 
-    //TODO THIS CODE DOESNT FOLLOW THOSE STEPS ^
-    let userPromises = dbMessages.map(message => {
-        return User.findOne({
-            where: {
-                id: message.userId
-            }
-        })
-    })
+    // TODO THIS CODE DOESNT FOLLOW THOSE STEPS ^
+    const userPromises = dbMessages.map(message => User.findOne({ where: { id: message.userId } }))
     // Resolve all promises
-    let users = await Promise.all(userPromises)
+    const users = await Promise.all(userPromises)
     // Return serialized messages
-    return users.map((user, index) => {
-        // Ehh
-        let message = dbMessages[index]
-        return completedMessageBuilder(user, message)
-    })
+    return users.map((user, index) => completedMessageBuilder(user, dbMessages[index]))
 }

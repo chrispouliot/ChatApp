@@ -8,8 +8,8 @@ export const Message = db.define('message', {
     text: dataTypes.TEXT,
     pubId: {
         type: dataTypes.UUID,
-        defaultValue: dataTypes.UUIDV4
-    }
+        defaultValue: dataTypes.UUIDV4,
+    },
 })
 // User
 export const User = db.define('user', {
@@ -20,9 +20,9 @@ export const User = db.define('user', {
         validate: {
             len: {
                 args: 4,
-                msg: "Username must be atleast 4 characters in length"
-            }
-        }
+                msg: 'Username must be atleast 4 characters in length',
+            },
+        },
     },
     password: {
         type: dataTypes.STRING,
@@ -30,21 +30,19 @@ export const User = db.define('user', {
         validate: {
             len: {
                 args: 4,
-                msg: "Password must be atleast 4 characters in length"
-            }
-        }
+                msg: 'Password must be atleast 4 characters in length',
+            },
+        },
     },
     pubId: {
         type: dataTypes.UUID,
-        defaultValue: dataTypes.UUIDV4
-    }
+        defaultValue: dataTypes.UUIDV4,
+    },
 }, {
     instanceMethods: {
-        setPassword: password => {
+        setPassword: (password) => {
             this.password = bcrypt.hashSync(password)
         },
-        validatePassword: password => {
-            return bcrypt.compareSync(password, this.password)
-        }
-    }
+        validatePassword: password => bcrypt.compareSync(password, this.password),
+    },
 })

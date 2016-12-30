@@ -6,27 +6,27 @@ import { ActionTypes } from '../../util/constants'
 
 const CHANGE_EVENT = 'change'
 
-let messageState = {
+const messageState = {
     loadedMessages: {},
-    loadingMessages: {}
+    loadingMessages: {},
 }
 
-const addLoadedMessage = message => {
+const addLoadedMessage = (message) => {
     messageState.loadedMessages[message.id] = message
 }
 
-const addLoadingMessage = message => {
+const addLoadingMessage = (message) => {
     messageState.loadingMessages[message.id] = message
 }
 
-const updateMessage = updatedMessage => {
+const updateMessage = (updatedMessage) => {
     // for now just assume it's to update status, but we will
     // need to also accept "edits" to message text
     messageState.loadedMessages[updatedMessage.id] = updatedMessage
     delete messageState.loadingMessages[updatedMessage.prevId]
 }
 
-let MessageStore = assign({}, EventEmitter.prototype, {
+const MessageStore = assign({}, EventEmitter.prototype, {
     emitChange() {
         this.emit(CHANGE_EVENT)
     },
@@ -41,25 +41,29 @@ let MessageStore = assign({}, EventEmitter.prototype, {
 
     getAll() {
         return messageState
-    }
+    },
 })
 
-MessageStore.dispatchToken = AppDispatcher.register(action => {
-    switch(action.type) {
-        case ActionTypes.CREATE_LOADING_MESSAGE:
+MessageStore.dispatchToken = AppDispatcher.register((action) => {
+    switch (action.type) {
+        case ActionTypes.CREATE_LOADING_MESSAGE: {
             addLoadingMessage(action.message)
             MessageStore.emitChange()
             break
-        case ActionTypes.CREATE_NEW_MESSAGE:
+        }
+        case ActionTypes.CREATE_NEW_MESSAGE: {
             addLoadedMessage(action.message)
             MessageStore.emitChange()
             break
-        case ActionTypes.UPDATE_MESSAGE:
+        }
+        case ActionTypes.UPDATE_MESSAGE: {
             updateMessage(action.message)
             MessageStore.emitChange()
             break
-        default:
+        }
+        default: {
             console.log(`Received message store action ${action.type} which was not accounted for`)
+        }
     }
 })
 
